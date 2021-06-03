@@ -1,0 +1,71 @@
+/Create new class table
+create table hw4.class 
+( 
+    classnumber varchar(7)  not null, 
+    facidfk     varchar(4)  not null 
+        constraint class_faculty_facid_fk 
+            references hw4.faculty, 
+    schedule    varchar(15) not null, 
+    room        varchar(4)  not null, 
+    credithours integer     not null, 
+    constraint class_pk 
+        primary key (classnumber, facidfk) 
+); 
+ 
+alter table hw4.class 
+    owner to jdmuniz; 
+ 
+create unique index class_classnumber_uindex 
+    on hw4.class (classnumber); 
+
+ 
+
+create table hw4.faculty 
+( 
+    facid      varchar(4) not null 
+        constraint faculty_pk 
+            primary key, 
+    name       char(50)   not null, 
+    department char(20)   not null, 
+    rank       char(20)   not null 
+); 
+ 
+alter table hw4.faculty 
+    owner to jdmuniz; 
+ 
+create unique index faculty_facid_uindex 
+    on hw4.faculty (facid); 
+
+create table hw4.student 
+( 
+    stuid     varchar(5)        not null 
+        constraint student_pk 
+            primary key, 
+    lastname  char(50)          not null, 
+    firstname char(50)          not null, 
+    major     char(50)          not null, 
+    credits   integer default 0 not null 
+); 
+ 
+alter table hw4.student 
+    owner to jdmuniz; 
+ 
+create unique index student_stuid_uindex 
+    on hw4.student (stuid); 
+
+create table hw4.enroll 
+( 
+    stuidfk       varchar(5)        not null 
+        constraint enroll_student_stuid_fk 
+            references hw4.student, 
+    classnumberfk varchar           not null 
+        constraint enroll_class_classnumber_fk 
+            references hw4.class (classnumber), 
+    grade         char, 
+    gradevalue    integer default 0 not null, 
+    constraint enroll_pk 
+        primary key (stuidfk, classnumberfk) 
+); 
+ 
+alter table hw4.enroll 
+    owner to jdmuniz; 
